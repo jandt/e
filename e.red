@@ -30,6 +30,10 @@ search: func [word [string!]][
 		]
 	buf]
 
+top: func [][buf: head buf]
+
+bottom: func [][buf: tail buf]
+
 
 commandbuf: []
 
@@ -38,16 +42,19 @@ oops:  func [] [take/last commandbuf]
 cb: func [] [foreach line commandbuf[print line]]
 
 o-com: func [][if name: commandbuf/1 [o to-file name oops!]]
-p-com: func [][p  clear commandbuf oops!]
+p-com: func [][p  oops!]
 w-com: func [][w to-file commandbuf/1 oops!]
 d-com: func [][d  oops!]
 i-com: func [][i commandbuf oops!]
 a-com: func [][a commandbuf oops!]
 r-com: func [][r commandbuf oops!]
 s-com: func [][if word: commandbuf/1 [search word] oops!]
+<-com: func [][top oops!]
+>-com: func [][bottom oops!]
 
-top: func [][buf: head buf oops!]
-bottom: func [][buf: tail buf oops!]
+runred: func [][text: copy ""
+                foreach line commandbuf [text: rejoin [text " " line]]
+		do to-block text]
 
 commands: ["o" o-com "p" p-com "w" w-com "d" d-com
 	  "i" i-com "a" a-com "r" r-com
@@ -55,7 +62,7 @@ commands: ["o" o-com "p" p-com "w" w-com "d" d-com
 	  "cb" cb "oops" oops "oops!" oops!
 	  ;"quit" quit
 	  "<" top ">" bottom
-	  "ls" ls
+	  "ls" ls "runred" runred
 	  ]
 
 repl: func[][
