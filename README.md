@@ -80,7 +80,7 @@ There is no javascript engine used, so there is no `runjs` command. But there is
 
     > a ["Hello World." "Now you can use Red syntax at the e prompt."]
     > runred
-[M`*?    > p
+    > p
     Hello World.
     Now you can use Red syntax at the e prompt.
     >
