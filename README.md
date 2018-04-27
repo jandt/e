@@ -8,7 +8,16 @@ There is one important difference to the original implementation: Line moving wi
 
 Have Fun. And thanks to LaPingvino for the inspiration.
 
-## usage
+## Startup
+
+Install [red](https://www.red-lang.org).<sup>[1](#brew)</sup>
+
+At the moment, e runs only in interpreted mode. Run
+    red e.red
+
+<a name="brew">1</a>: Mac OS users: There's a [homebrew](https://brew.sh) package, so just do `brew install red`.
+
+## Usage
 
 There are two buffers: The command buffer and the file buffer.
 
@@ -20,13 +29,20 @@ Just start typing at the prompt (`> `). If your line is not a command, it is app
 
 `p` (print) the content of the file buffer, from the current line on.
 
-`o` (open) reads a file into the file buffer, `w` (write) writes it to a file. The file name is taken from the command buffer.
+`o` (open) reads a file into the file buffer, `w` (write) writes it to a file. The file name is taken from the command buffer. `new` empties the file buffer.
 
 `:` *numlines* moves the current line by the numlines forward. (Negative numlines move backwards.) `<` goes to the first line (top), `>` after the last line. `s` (search) moves to the next line that contains the word given in the cb.
 
 `ls` gives a list of files in the current directory. No further such functions are implemented, but you can use the `runred` command described below.
 
 In doubt, refer to the source code.
+
+#### Differences to the original `e`
+- Some command names are shorter
+- The print command at the moment only prints the whole buffer.
+- `o`, `w`, `s` take the *last* line of the command buffer as argument, and leave the rest of it in place.
+- `p` and `d` leave the command buffer unchanged, in other words:
+- only `a`, `i` and `r` "consume" the command buffer
 
 ### Example session
 
@@ -56,6 +72,8 @@ In doubt, refer to the source code.
 	[e](https://github.com/LaPingvino/e), rewritten in [Red](https://www.red-lang.org).
 	> README_dummy.md
 	> w
+
+All `e` commands can be used in `runed` mode, only `<` and `>` must be called as `top` and `bottom` respectively, to avoid name clashes with the comparison operators. Operators must then be given in red syntax, i.e. `o %somefile.txt`, `i ["Insert this line", "and this"]`.
 
 ## runred
 

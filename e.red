@@ -2,11 +2,14 @@ Red[]
 
 buf: []
 
-o: func [f [file!]][buf: read/lines f]
+new: func[][buf: copy []]
+o: func [f [file!]][
+   if error? try [buf: read/lines f print ["Opened file:" f]]
+      	     	 [print ["Could not load file:" f]]]
 
 p: func [][foreach line buf [print line]]
 
-w: func [f [file!]][write/lines f head buf]
+w: func [f [file!]][write/lines f head buf print ["Wrote file:" f]]
 
 d: func [][buf: remove buf]
 
@@ -21,14 +24,15 @@ a: func [lines [block!]][
 r: func [lines [block!]][
    change buf lines]
 
-search: func [word [string!]][
-	i: 0
-	foreach line buf[
-	       	found: find line word
-		if found [return buf: skip buf i]
-		i: i + 1
-		]
-	buf]
+s: func [word [string!]][
+   i: 0
+   foreach line buf[
+   	   found: find line word
+	   if found [return buf: skip buf i]
+	   i: i + 1
+	   ]
+   print "Not found."
+   buf]
 
 top: func [][buf: head buf]
 
@@ -37,26 +41,31 @@ bottom: func [][buf: tail buf]
 
 commandbuf: []
 
-oops!: func [] [clear commandbuf]
-oops:  func [] [take/last commandbuf]
+pop-command:  func [] [take/last commandbuf]
+clear-commands: func [] [clear commandbuf]
+oops!: :clear-commands
+oops: :pop-command
 cb: func [] [foreach line commandbuf[print line]]
 
-o-com: func [][if name: commandbuf/1 [o to-file name oops!]]
-p-com: func [][p  oops!]
-w-com: func [][w to-file commandbuf/1 oops!]
-d-com: func [][d  oops!]
-i-com: func [][i commandbuf oops!]
-a-com: func [][a commandbuf oops!]
-r-com: func [][r commandbuf oops!]
-s-com: func [][if word: commandbuf/1 [search word] oops!]
-<-com: func [][top oops!]
->-com: func [][bottom oops!]
+noarg: func [][print "Argument expected."]
+check-cb: func[][
+	  unless empty? commandbuf
+	  	 [print "Btw, there is still stuff in the command buffer."]]
+new-com: :new
+o-com: func [][either name: pop-command [o to-file name][noarg]]
+p-com: :p
+w-com: func [][either name: pop-command[w to-file name check-cb][noarg]]
+d-com: :d
+i-com: func [][i commandbuf clear-commands]
+a-com: func [][a commandbuf clear-commands]
+r-com: func [][r commandbuf clear-commands]
+s-com: func [][either word: pop-command [s word][noarg]]
 
 runred: func [][text: copy ""
                 foreach line commandbuf [text: rejoin [text " " line]]
-		do to-block text]
+OA		do to-block text clear-commands]
 
-commands: ["o" o-com "p" p-com "w" w-com "d" d-com
+commands: ["new" new-com "o" o-com "p" p-com "w" w-com "d" d-com
 	  "i" i-com "a" a-com "r" r-com
 	  "s" s-com
 	  "cb" cb "oops" oops "oops!" oops!
@@ -64,6 +73,8 @@ commands: ["o" o-com "p" p-com "w" w-com "d" d-com
 	  "<" top ">" bottom
 	  "ls" ls "runred" runred
 	  ]
+
+
 
 repl: func[][
         buf: []
