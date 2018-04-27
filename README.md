@@ -13,7 +13,8 @@ Have Fun. And thanks to LaPingvino for the inspiration.
 Install [red](https://www.red-lang.org).<sup>[1](#brew)</sup>
 
 At the moment, e runs only in interpreted mode. Run
-    red e.red
+     
+	 red e.red
 
 <a name="brew">1</a>: Mac OS users: There's a [homebrew](https://brew.sh) package, so just do `brew install red`.
 
@@ -73,18 +74,21 @@ In doubt, refer to the source code.
 	> README_dummy.md
 	> w
 
-All `e` commands can be used in `runed` mode, only `<` and `>` must be called as `top` and `bottom` respectively, to avoid name clashes with the comparison operators. Operators must then be given in red syntax, i.e. `o %somefile.txt`, `i ["Insert this line", "and this"]`.
-
 ## runred
 
 There is no javascript engine used, so there is no `runjs` command. But there is runred:
 
     > a ["Hello World." "Now you can use Red syntax at the e prompt."]
     > runred
-    > p
+[M`*?    > p
     Hello World.
     Now you can use Red syntax at the e prompt.
     >
+	
+All `e` commands can be used in `runed` mode, only `<` and `>` must be called as `top` and `bottom` respectively, to avoid name clashes with the comparison operators.
+
+Operators must then be given in red syntax, i.e. `o %somefile.txt`, `i ["Insert this line", "and this"]`.
+
 
 ## Esperanto
 
